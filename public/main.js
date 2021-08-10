@@ -66,8 +66,7 @@ async function getCarTrackingInfo(){
 
     const form = document.createElement('form');
     form.style.width = "40%";
-    form.setAttribute('method', 'POST');
-    form.setAttribute('action', '/addCar');
+    // form.setAttribute('method', 'POST');
     const inputFieldLabels = ['Model', 'Location', 'Capacity'];
 
     for (let i = 0; i < 3; i++) {
@@ -88,91 +87,40 @@ async function getCarTrackingInfo(){
     AddCarButton.classList.add('btn', 'btn-primary', 'addCarBtn')
     form.appendChild(AddCarButton);
 
-    // AddCarButton.addEventListener('click', (e) => {
-    //   e.preventDefault();
-    //   // console.log('Clicked' + AddCarButton.type);
-    //   addCarToDb();
-    // });
-
     console.log(data);
-
-    // data.forEach((item) => {
-    //   let li = document.createElement("li");
-    //   const Deletebutton = document.createElement("button")
-    //   Deletebutton.className = 'delete-tracking'
-    //   Deletebutton.innerHTML = 'delete'
-    //   li.innerText = `${item.id}  ${item.model} ${item.location} ${item.capacity}` 
-    //   li.appendChild(Deletebutton)
-    //   mainContent.appendChild(li)
-    // });
 
     form.addEventListener("submit", (e) => {
       e.preventDefault();
-      const formData = new FormData(this.formData);
-      console.log(formData);
-      addCarToDb(formData);
-    })
-}
-
-//Function to add a car to the database
-async function addCarToDb(data){
-  // const formData = new FormData(this.formData);
-  const response = await fetch('/addCar', {
-    method: 'POST',
-    mode: 'cors',
-    body: data.stringify
-  })
-  // const formData = new FormData(this.formData);
-  // console.log(formData);
-  // console.log(formData);
-
-  // const response = await fetch('/addCar', {
-  //   method: 'POST',
-  //   body: formData
-  // })
-  // .then(res => res.text())          // convert to plain text
-  // .then(text => console.log(text))
-
-  // const data = await response.json();
-  // console.log(data);
-
-// const response = await fetch('/addCar');
-
-//   //returns a promise so we need to convert it json
-//   const data = await response.json();
-//   console.log(data);
-
-}
-
-const trackAccidents = document.querySelector('.track-accidents')
-
-trackAccidents.addEventListener('click', async (e)=> {
-    e.preventDefault()
-
-    const accidentData = await fetch('/accidents')
-    const data = await accidentData.json()
-
- data.forEach((item) => {
-     console.log(item);
-      let li = document.createElement("li");
-      li.innerText = `${item.id} ${item.description} at ${item.location} : Car model ${item.model}`
-      
-    //   list.appendChild(li);
-      mainContent.appendChild(li)
+      addCarToDb(e);
     });
 
-})
+  }
+// Function to add a car to the database
+function addCarToDb(ev){
+  let myForm = ev.target;
+  console.log(myForm);
+  let fd = new FormData(myForm);
+  fetch('/addCar', {
+    method: 'POST',
+    mode: 'cors',
+    body: fd.stringify
+  })
+}
 
+// const trackAccidents = document.querySelector('.track-accidents')
 
+// trackAccidents.addEventListener('click', async (e)=> {
+//     e.preventDefault()
 
-// $(function(){
-//     $('#jqr').click(function() {
-//         $("#content").load("accidents.html");
+//     const accidentData = await fetch('/accidents')
+//     const data = await accidentData.json()
+
+//  data.forEach((item) => {
+//      console.log(item);
+//       let li = document.createElement("li");
+//       li.innerText = `${item.id} ${item.description} at ${item.location} : Car model ${item.model}`
+
+//       mainContent.appendChild(li)
 //     });
-// });
 
-    // $(document).ready(function(){
-    //     $("#content").load("accidents.html");
-    // });
-
-
+// })
