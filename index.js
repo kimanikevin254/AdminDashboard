@@ -47,11 +47,11 @@ app.get('/cartracking', async(req, res) => {
 })
 
 app.post('/addCar', (req, res) => {
-    console.log(req.body.Model) 
-    console.log(req.body.Location)
-    console.log(req.body.Capacity)
+    // console.log(req.body.Model) 
+    // console.log(req.body.Location)
+    // console.log(req.body.Capacity)
     console.log('Got body:', req.body);
-    res.send(req.body);
+    // res.send(req.body);
 });
 
 // app.get('/addCar', async(req, res) => {
