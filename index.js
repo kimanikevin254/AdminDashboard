@@ -63,15 +63,16 @@ app.post('/removeCar', urlencodedParser, function (req, res) {
     })
 })
 
-// app.get('/accidents', async(req, res) => {
-//     const sql = 'SELECT * FROM kefri.accidents INNER JOIN kefri.vehicles WHERE kefri.vehicles.id = kefri.accidents.id';
-//     const getcardata = connection.query(sql, (err, results) => {
-//             if (err) throw err;
-//             console.log(results);
-//             res.send(results);
-//         });
+//Route to get accidents data
+app.get('/accidentsTracking', async(req, res) => {
+    const sql = 'SELECT * FROM kefri.accidents INNER JOIN kefri.vehicles WHERE kefri.vehicles.id = kefri.accidents.id';
+    const getAccidentsdata = connection.query(sql, (err, results) => {
+            if (err) throw err;
+            console.log(results);
+            res.send(results);
+        });
     
-// })
+})
 
 //Listen to port 3000
 app.listen(port, () => {

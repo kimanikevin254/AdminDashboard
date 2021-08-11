@@ -2,6 +2,7 @@ console.log("JS LOADED")
 
 const mainContent = document.querySelector('.main-content');
 
+//CAR TRACKING: READ FROM THE DATABASE, ADD TO THE DATABASE AND DELETE FROM THE DATABASE
 //Logic to clear the main-content area if it already has content on the click of track cars button
 document.getElementById("cartrack").addEventListener('click', (e) => {
     e.preventDefault();
@@ -179,3 +180,58 @@ function deleteCarFromDb(deleteCarData){
   }
   fetch('/removeCar', options)
 }
+
+
+
+//ACCIDENT TRACKING: READ FROM THE DATABASE, POST TO DATABASE AND DELETE FROM THE DATABASE, POST
+document.querySelector('#accidenttrack').addEventListener('click', (e) => {
+  e.preventDefault();
+  if(document.querySelector('.main-content') !== null){
+    document.querySelector('.main-content').innerHTML = "";
+  }
+
+  getAccidentTrackingInfo();
+})
+
+//Get accidents data from the database
+async function getAccidentTrackingInfo(){
+  const response = await fetch('/accidentsTracking');
+
+  //returns a promise so we need to convert it json
+  const data = await response.json();
+  console.log(data);
+
+  for (let i = 0; i < data.length; i++) {
+    const accidentDiv = document.createElement('div');
+    accidentDiv.classList.add('card', 'text-white', 'bg-success', 'mb-3');
+    const accidentHeaderDiv = document.createElement('div');
+    accidentHeaderDiv.classList.add('card-header');
+    accidentHeaderDiv.innerHTML = "Accident ID:" + " " + data[i].id;
+    const accidentBodyDiv = document.createElement('div');
+    accidentBodyDiv.classList.add('card-body');
+    const accidentH5 = document.createElement('h5');
+    accidentH5.classList.add('card-title');
+    accidentH5.innerHTML = "Location:" + " " + data[i].location;
+    const accidentH52 = document.createElement('h5');
+    accidentH52.classList.add('card-title');
+    accidentH52.innerHTML = "Car involved:" + " " + "Car Model: " + data[i].model + ", " + "Car ID: " + data[i].vehicleId;
+    const accidentP = document.createElement('p');
+    accidentP.classList.add('card-text');
+    accidentP.innerHTML = "Accident Description: " +data[i].description;
+
+    accidentDiv.appendChild(accidentHeaderDiv);
+    accidentBodyDiv.appendChild(accidentH5);
+    accidentBodyDiv.appendChild(accidentH52);
+    accidentBodyDiv.appendChild(accidentP);
+    accidentDiv.appendChild(accidentBodyDiv);
+    mainContent.appendChild(accidentDiv);
+  }
+}
+
+{/* <div class="card text-white bg-success mb-3" style="max-width: 18rem;">
+  <div class="card-header">Header</div>
+  <div class="card-body">
+    <h5 class="card-title">Success card title</h5>
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+  </div>
+</div> */}
