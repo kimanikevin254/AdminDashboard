@@ -67,6 +67,7 @@ async function getCarTrackingInfo(){
     const form = document.createElement('form');
     form.style.width = "40%";
     // form.setAttribute('method', 'POST');
+    // form.setAttribute('action', '/addCar');
     const inputFieldLabels = ['Model', 'Location', 'Capacity'];
 
     for (let i = 0; i < 3; i++) {
@@ -74,6 +75,7 @@ async function getCarTrackingInfo(){
       label.innerText = inputFieldLabels[i];
       const input = document.createElement('input');
       input.setAttribute('name', inputFieldLabels[i]);
+      input.setAttribute('id', inputFieldLabels[i]);
       input.classList.add('form-control');
       form.appendChild(label);
       form.appendChild(input);
@@ -81,46 +83,34 @@ async function getCarTrackingInfo(){
 
     mainContent.appendChild(form);
 
+    //Create the submit button
     const AddCarButton = document.createElement('button');
     AddCarButton.setAttribute('type', 'submit');
     AddCarButton.innerHTML = 'Add Car';
     AddCarButton.classList.add('btn', 'btn-primary', 'addCarBtn')
     form.appendChild(AddCarButton);
 
-    console.log(data);
-
+    //Call the addcar function on form submit
     form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      addCarToDb(e);
+      e.preventDefault(); //prevent the form from submitting
+
+      //Convert the user input into an object
+      let carData = {
+        Model: document.getElementById('Model').value,
+        Location: document.getElementById('Location').value,
+        Capacity: document.getElementById('Capacity').value
+      }
+      addCarToDb(carData);
     });
 
   }
+
 // Function to add a car to the database
-function addCarToDb(ev){
-  let myForm = ev.target;
-  console.log(myForm);
-  let fd = new FormData(myForm);
-  fetch('/addCar', {
+function addCarToDb(carData) {
+  const options = {
     method: 'POST',
-    mode: 'cors',
-    body: fd.stringify
-  })
+    headers: { 'Content-Type': 'application/json'},
+    body: JSON.stringify(carData)
+  }
+  fetch('/addCar', options)
 }
-
-// const trackAccidents = document.querySelector('.track-accidents')
-
-// trackAccidents.addEventListener('click', async (e)=> {
-//     e.preventDefault()
-
-//     const accidentData = await fetch('/accidents')
-//     const data = await accidentData.json()
-
-//  data.forEach((item) => {
-//      console.log(item);
-//       let li = document.createElement("li");
-//       li.innerText = `${item.id} ${item.description} at ${item.location} : Car model ${item.model}`
-
-//       mainContent.appendChild(li)
-//     });
-
-// })
