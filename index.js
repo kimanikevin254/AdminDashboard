@@ -65,7 +65,7 @@ app.post('/removeCar', urlencodedParser, function (req, res) {
 
 //Route to get accidents data
 app.get('/accidentsTracking', async(req, res) => {
-    const sql = 'SELECT * FROM kefri.accidents INNER JOIN kefri.vehicles WHERE kefri.vehicles.id = kefri.accidents.id';
+    const sql = 'SELECT * FROM kefri.accidents INNER JOIN kefri.vehicles WHERE kefri.vehicles.id = kefri.accidents.vehicleId';
     const getAccidentsdata = connection.query(sql, (err, results) => {
             if (err) throw err;
             console.log(results);
