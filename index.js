@@ -52,20 +52,28 @@ app.post('/addCar', urlencodedParser, function (req, res) {
     const addCar = connection.query(sql, (err, results) => {
         if(err) throw err;
     })   
-  })
-
-
-app.get('/accidents', async(req, res) => {
-    const sql = 'SELECT * FROM kefri.accidents INNER JOIN kefri.vehicles WHERE kefri.vehicles.id = kefri.accidents.id';
-    const getcardata = connection.query(sql, (err, results) => {
-            if (err) throw err;
-            console.log(results);
-            res.send(results);
-        });
-    
 })
+
+//Route to remove car from db
+app.post('/removeCar', urlencodedParser, function (req, res) {
+    const sql = `DELETE FROM kefri.vehicles WHERE id = ${req.body.id}`;
+    const deleteCar = connection.query(sql, (err, results) => {
+        if(err) throw err;
+    console.log(req.body.id);
+    })
+})
+
+// app.get('/accidents', async(req, res) => {
+//     const sql = 'SELECT * FROM kefri.accidents INNER JOIN kefri.vehicles WHERE kefri.vehicles.id = kefri.accidents.id';
+//     const getcardata = connection.query(sql, (err, results) => {
+//             if (err) throw err;
+//             console.log(results);
+//             res.send(results);
+//         });
+    
+// })
 
 //Listen to port 3000
 app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`);
-  });
+    console.log(`Example app listening at http://localhost:${port}`)
+  })

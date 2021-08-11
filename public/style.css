@@ -84,6 +84,24 @@ li{
     margin-bottom: 4px;
 }
 
-.addCarBtn{
+.addCarBtn, .deleteCarBtn{
     margin-top: 0.8em;
+}
+.deleteCarDiv{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.addCarDiv{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.addCarDeleteCarDiv{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
 }
