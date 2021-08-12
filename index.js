@@ -65,13 +65,65 @@ app.post('/removeCar', urlencodedParser, function (req, res) {
 
 //Route to get accidents data
 app.get('/accidentsTracking', async(req, res) => {
-    const sql = 'SELECT * FROM kefri.accidents INNER JOIN kefri.vehicles WHERE kefri.vehicles.id = kefri.accidents.vehicleId';
+    const sql = 'SELECT * FROM kefri.accidents INNER JOIN kefri.vehicles WHERE kefri.accidents.vehicleId = kefri.vehicles.id';
     const getAccidentsdata = connection.query(sql, (err, results) => {
             if (err) throw err;
             console.log(results);
             res.send(results);
         });
     
+})
+
+//Route to add an accident to db
+app.post('/addAccident', urlencodedParser, function (req, res) {
+    const sql = `INSERT INTO kefri.accidents(description, location, vehicleId) VALUES("${ req.body.description }", "${ req.body.location }", ${ req.body.vehicleId })`;
+    const addAccident = connection.query(sql, (err, results) => {
+        if(err) throw err;
+    })   
+})
+
+//Route to remove an accident from db
+app.post('/removeAccident', urlencodedParser, function (req, res) {
+    const sql = `DELETE FROM kefri.accidents WHERE id = ${req.body.id}`;
+    const deleteAccident = connection.query(sql, (err, results) => {
+        if(err) throw err;
+    console.log(req.body.id);
+    })
+})
+
+//Route to get rooms info
+app.get('/roomsInfo', async(req, res) => {
+    const sql = 'SELECT * FROM kefri.rooms';
+    const getAccidentsdata = connection.query(sql, (err, results) => {
+            if (err) throw err;
+            console.log(results);
+            res.send(results);
+        });
+    
+})
+
+//Route to update room info
+app.post('/updateRoomInfo', urlencodedParser, function (req, res) {
+    const sql = `UPDATE kefri.rooms SET roomStatus = '${req.body.roomStatus}' WHERE roomId = ${req.body.roomId}`;
+    const deleteAccident = connection.query(sql, (err, results) => {
+        if(err) throw err;
+    })
+})
+
+//Route to add a room
+app.post('/addRoomInfo', urlencodedParser, function (req, res) {
+    const sql = `INSERT INTO kefri.rooms(roomLocation, roomStatus) VALUES( '${req.body.roomLocation}', '${req.body.roomStatus}' )`;
+    const deleteAccident = connection.query(sql, (err, results) => {
+        if(err) throw err;
+    })
+})
+
+//Route to add a room
+app.post('/deleteRoomInfo', urlencodedParser, function (req, res) {
+    const sql = `DELETE FROM kefri.rooms WHERE roomId = ${req.body.roomId} `;
+    const deleteAccident = connection.query(sql, (err, results) => {
+        if(err) throw err;
+    })
 })
 
 //Listen to port 3000

@@ -70,15 +70,6 @@ span{
     font-size: 1.2rem;
 }
 
-table, th, td{
-    border-collapse: collapse;
-    border: 1px solid black;
-}
-
-th,td{
-    padding: 5px;
-}
-
 li{
     list-style-type: none;
     margin-bottom: 4px;
@@ -87,19 +78,19 @@ li{
 .addCarBtn, .deleteCarBtn{
     margin-top: 0.8em;
 }
-.deleteCarDiv{
+.deleteCarDiv, .deleteAccidentDiv{
     display: flex;
     flex-direction: column;
     width: 100%;
 }
 
-.addCarDiv{
+.addCarDiv, .addAccidentDiv{
     display: flex;
     flex-direction: column;
     width: 100%;
 }
 
-.addCarDeleteCarDiv{
+.addCarDeleteCarDiv, .addAccidentDeleteAccidentDiv, .updateAddDeleteRoomsDiv{
     display: flex;
     flex-direction: row;
     justify-content: space-around;
