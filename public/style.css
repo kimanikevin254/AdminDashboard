@@ -97,3 +97,11 @@ li{
     justify-content: space-around;
     width: 100%;
 }
+
+.addCarDeleteCarDiv, .addAccidentDeleteAccidentDiv{
+    display: none;
+}
+
+.addCarDeleteCarDivShow, .addAccidentDeleteAccidentDivShow{
+    display: flex;
+}

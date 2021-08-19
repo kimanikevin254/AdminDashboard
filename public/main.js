@@ -84,6 +84,18 @@ async function getCarTrackingInfo(){
     const addCarDeleteCarDiv = document.createElement('div');
     addCarDeleteCarDiv.classList.add('addCarDeleteCarDiv');
 
+    const editCarInfoButton = document.createElement('button');
+    editCarInfoButton.innerHTML = '<i class="fas fa-edit"></i> Edit'
+    editCarInfoButton.classList.add('btn', 'btn-danger')
+
+    editCarInfoButton.addEventListener('click', (e) => {
+      console.log('clicked')
+      e.preventDefault();
+      addCarDeleteCarDiv.classList.toggle('addCarDeleteCarDivShow');
+    })
+
+    mainContent.appendChild(editCarInfoButton);
+
     const addCarDiv = document.createElement('div');
     addCarDiv.classList.add('addCarDiv');
 
@@ -247,6 +259,18 @@ async function getAccidentTrackingInfo() {
     accidentDiv.appendChild(accidentBodyDiv);
     mainContent.appendChild(accidentDiv);
   }
+
+  const editAccidentButton = document.createElement('button');
+    editAccidentButton.innerHTML = '<i class="fas fa-edit"></i> Edit'
+    editAccidentButton.classList.add('btn', 'btn-danger')
+
+    editAccidentButton.addEventListener('click', (e) => {
+      console.log('clicked')
+      e.preventDefault();
+      addAccidentDeleteAccidentDiv.classList.toggle('addAccidentDeleteAccidentDivShow');
+    })
+
+    mainContent.appendChild(editAccidentButton);
 
   const addAccidentDeleteAccidentDiv = document.createElement('div');
   addAccidentDeleteAccidentDiv.classList.add('addAccidentDeleteAccidentDiv');
@@ -570,4 +594,479 @@ function deleteRoomInfo(addRoomData) {
     body: JSON.stringify(addRoomData)
   }
   fetch('/deleteRoomInfo', options)
+}
+
+//ASSET MANAGEMENT
+
+//TRACKING OFFICE SPACE
+document.querySelector('#trackOffices').addEventListener('click', (e) => {
+  e.preventDefault();
+  if(document.querySelector('.main-content') !== null){
+    document.querySelector('.main-content').innerHTML = "";
+  }
+
+  getOfficeInfo();
+})
+
+async function getOfficeInfo(){
+  const response = await fetch('/officeInfo');
+
+  //returns a promise so we need to convert it json
+  const data = await response.json();
+  console.log(data)
+
+  const officeTrackh2 = document.createElement('h2');
+  officeTrackh2.innerText = 'Office Management Information';
+  mainContent.appendChild(officeTrackh2);
+
+  //create bootstrap cards
+const officeInfoDiv = document.createElement('div');
+officeInfoDiv.classList.add('container-fluid', 'd-flex', 'flex-wrap');
+
+for (let i = 0; i < data.length; i++) {
+const officeCardsDiv = document.createElement('div');
+officeCardsDiv.classList.add('card', 'text-white', 'bg-success', 'mb-3', 'ms-3')
+officeCardsDiv.style.maxWidth = '18rem';
+const officeCardsHeaderDiv = document.createElement('div');
+officeCardsHeaderDiv.innerHTML = 'Office No: ' + data[i].officeNo;
+officeCardsHeaderDiv.classList.add('card-header')
+const officeCardsBodyDiv = document.createElement('div');
+officeCardsBodyDiv.classList.add('card-body')
+const totalSpaceh5 = document.createElement('h6');
+totalSpaceh5.innerHTML= 'Total Space: ' + data[i].totalSpace + ' Sq. ft'
+totalSpaceh5.classList.add('card-text')
+const usedSpaceh5 = document.createElement('h6');
+usedSpaceh5.innerHTML= 'Used Space: ' + data[i].spaceUsed + ' Sq. ft'
+usedSpaceh5.classList.add('card-text')
+const freeSpaceh5 = document.createElement('h6');
+freeSpaceh5.innerHTML= 'Free Space: ' + (data[i].totalSpace - data[i].spaceUsed) + ' Sq. ft'
+freeSpaceh5.classList.add('card-text')
+
+officeCardsDiv.appendChild(officeCardsHeaderDiv)
+officeCardsBodyDiv.appendChild(totalSpaceh5)
+officeCardsBodyDiv.appendChild(usedSpaceh5)
+officeCardsBodyDiv.appendChild(freeSpaceh5)
+officeCardsDiv.appendChild(officeCardsBodyDiv)
+officeInfoDiv.appendChild(officeCardsDiv)
+mainContent.appendChild(officeInfoDiv);
+}
+
+const modifyOfficeInfoDiv = document.createElement('div');
+modifyOfficeInfoDiv.classList.add('container-fluid', 'd-flex', 'justify-content-around');
+
+const updateOfficeInfoDiv = document.createElement('div');
+updateOfficeInfoDiv.classList.add('d-flex', 'flex-column');
+const addOfficeDiv = document.createElement('div');
+const deleteOfficeDiv = document.createElement('div');
+
+const updateOfficeInfoh5 = document.createElement('h5');
+updateOfficeInfoh5.style.fontWeight = 'bold';
+updateOfficeInfoh5.innerHTML = 'Update office info:'
+updateOfficeInfoDiv.appendChild(updateOfficeInfoh5)
+
+const updateOfficeForm = document.createElement('form');
+const officeIdLabel = document.createElement('label')
+officeIdLabel.innerHTML = 'Office Id';
+const officeIdInput = document.createElement('input')
+officeIdInput.classList.add('form-control')
+officeIdInput.type = 'text';
+officeIdInput.setAttribute('id', 'officeIdInput')
+const totalSpaceLabel = document.createElement('label')
+totalSpaceLabel.innerHTML = 'Total Space';
+const totalSpaceInput = document.createElement('input')
+totalSpaceInput.classList.add('form-control')
+totalSpaceInput.type = 'text';
+totalSpaceInput.setAttribute('id', 'updateTotalSpace')
+const usedSpaceLabel = document.createElement('label')
+usedSpaceLabel.innerHTML = 'Used Space';
+const usedSpaceInput = document.createElement('input')
+usedSpaceInput.classList.add('form-control')
+usedSpaceInput.type = 'text';
+usedSpaceInput.setAttribute('id', 'updateUsedSpace')
+
+const updateOfficeBtn = document.createElement('button')
+updateOfficeBtn.classList.add('btn', 'btn-success', 'addCarBtn')
+updateOfficeBtn.innerHTML = 'Update'
+
+
+updateOfficeForm.appendChild(officeIdLabel)
+updateOfficeForm.appendChild(officeIdInput)
+updateOfficeForm.appendChild(totalSpaceLabel);
+updateOfficeForm.appendChild(totalSpaceInput);
+updateOfficeForm.appendChild(usedSpaceLabel);
+updateOfficeForm.appendChild(usedSpaceInput);
+
+updateOfficeForm.appendChild(updateOfficeBtn)
+
+updateOfficeInfoDiv.appendChild(updateOfficeForm)
+
+const addOfficeInfoh5 = document.createElement('h5');
+addOfficeInfoh5.style.fontWeight = 'bold';
+addOfficeInfoh5.innerHTML = 'Add a new office:'
+addOfficeDiv.appendChild(addOfficeInfoh5)
+
+const addOfficeForm = document.createElement('form');
+const addtotalSpaceLabel = document.createElement('label')
+addtotalSpaceLabel.innerHTML = 'Total Space';
+const addtotalSpaceInput = document.createElement('input')
+addtotalSpaceInput.classList.add('form-control')
+addtotalSpaceInput.type = 'text';
+addtotalSpaceInput.setAttribute('id', 'addTotalSpace')
+const addusedSpaceLabel = document.createElement('label')
+addusedSpaceLabel.innerHTML = 'Used Space';
+const addusedSpaceInput = document.createElement('input')
+addusedSpaceInput.classList.add('form-control')
+addusedSpaceInput.type = 'text';
+addusedSpaceInput.setAttribute('id', 'addusedSpace')
+
+const addOfficeBtn = document.createElement('button')
+addOfficeBtn.classList.add('btn', 'btn-success', 'addCarBtn')
+addOfficeBtn.innerHTML = 'Add'
+
+addOfficeForm.appendChild(addtotalSpaceLabel);
+addOfficeForm.appendChild(addtotalSpaceInput);
+addOfficeForm.appendChild(addusedSpaceLabel);
+addOfficeForm.appendChild(addusedSpaceInput);
+
+addOfficeForm.appendChild(addOfficeBtn)
+
+addOfficeDiv.appendChild(addOfficeForm)
+
+const deleteOfficeInfoh5 = document.createElement('h5');
+deleteOfficeInfoh5.style.fontWeight = 'bold';
+deleteOfficeInfoh5.innerHTML = 'Delete new office:'
+deleteOfficeDiv.appendChild(deleteOfficeInfoh5)
+
+const deleteOfficeForm = document.createElement('form');
+const deleteOfficeIdLabel = document.createElement('label')
+deleteOfficeIdLabel.innerHTML = 'Office id';
+const deleteOfficeIdInput = document.createElement('input')
+deleteOfficeIdInput.classList.add('form-control')
+deleteOfficeIdInput.type = 'text';
+deleteOfficeIdInput.setAttribute('id', 'deleteOfficeId')
+
+const deleteOfficeBtn = document.createElement('button')
+deleteOfficeBtn.classList.add('btn', 'btn-danger', 'addCarBtn')
+deleteOfficeBtn.innerHTML = 'Delete'
+
+
+deleteOfficeForm.appendChild(deleteOfficeIdLabel);
+deleteOfficeForm.appendChild(deleteOfficeIdInput);
+
+deleteOfficeForm.appendChild(deleteOfficeBtn);
+
+deleteOfficeDiv.appendChild(deleteOfficeForm)
+
+modifyOfficeInfoDiv.appendChild(updateOfficeInfoDiv)
+modifyOfficeInfoDiv.appendChild(addOfficeDiv)
+modifyOfficeInfoDiv.appendChild(deleteOfficeDiv)
+
+
+mainContent.appendChild(modifyOfficeInfoDiv);
+
+updateOfficeForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  let updateOfficeInfo = {
+    officeId: document.getElementById('officeIdInput').value,
+    totalSpace : document.getElementById('updateTotalSpace').value,
+    usedSpace : document.getElementById('updateUsedSpace').value
+  };
+  updateOffice(updateOfficeInfo);
+})
+addOfficeForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  let addOfficeInfo = {
+    totalSpace : document.getElementById('addTotalSpace').value,
+    usedSpace : document.getElementById('addusedSpace').value
+  };
+  addOffice(addOfficeInfo);
+})
+deleteOfficeForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  let deleteOfficeInfo = {
+    deleteOfficeId : document.getElementById('deleteOfficeId').value
+  };
+  deleteOffice(deleteOfficeInfo);
+})
+
+}
+
+async function updateOffice(updateOfficeInfo){
+  const options = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json'},
+    body: JSON.stringify(updateOfficeInfo)
+  }
+  fetch('/updateOffice', options)
+}
+async function addOffice(addOfficeInfo){
+  const options = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json'},
+    body: JSON.stringify(addOfficeInfo)
+  }
+  fetch('/addOffice', options)
+}
+
+async function deleteOffice(deleteOfficeInfo){
+  const options = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json'},
+    body: JSON.stringify(deleteOfficeInfo)
+  }
+  fetch('/deleteOffice', options)
+}
+
+//TRACKING STAFF HOUSES
+document.querySelector('#trackStaffHouses').addEventListener('click', (e) => {
+  e.preventDefault();
+  if(document.querySelector('.main-content') !== null){
+    document.querySelector('.main-content').innerHTML = "";
+  }
+
+  getStaffHousesInfo();
+})
+
+async function getStaffHousesInfo(){
+  const response = await fetch('/getStaffHouses')
+  const data = await response.json()
+  console.log(data)
+
+    //create bootstrap cards
+const staffInfoDiv = document.createElement('div');
+staffInfoDiv.classList.add('container-fluid', 'd-flex', 'flex-wrap');
+
+for (let i = 0; i < data.length; i++) {
+const staffCardsDiv = document.createElement('div');
+staffCardsDiv.classList.add('card', 'text-white', 'bg-success', 'mb-3', 'ms-3')
+staffCardsDiv.style.maxWidth = '18rem';
+const staffCardsHeaderDiv = document.createElement('div');
+staffCardsHeaderDiv.innerHTML = 'Office No: ' + data[i].houseNo;
+staffCardsHeaderDiv.classList.add('card-header')
+const staffCardsBodyDiv = document.createElement('div');
+staffCardsBodyDiv.classList.add('card-body')
+const houseRateh5 = document.createElement('h6');
+houseRateh5.innerHTML= 'House Rate: ' + 'Kshs.' + data[i].rate
+houseRateh5.classList.add('card-text')
+const houseStatush5 = document.createElement('h6');
+houseStatush5.innerHTML= 'House Status: ' + data[i].status
+houseStatush5.classList.add('card-text')
+const houseDescriptionp = document.createElement('p')
+houseDescriptionp.innerHTML= 'HouseDescription: <hr>' + data[i].houseDescription
+houseDescriptionp.classList.add('card-text')
+const vacationDateh5 = document.createElement('h6');
+vacationDateh5.innerHTML= 'Vacation Date: ' + new Date(data[i].expectedVacationDate).getDate() + '-' + (new Date(data[i].expectedVacationDate).getMonth() + 1) + '-' + new Date(data[i].expectedVacationDate).getFullYear() + '<br><br>'
+vacationDateh5.classList.add('card-text')
+
+staffCardsDiv.appendChild(staffCardsHeaderDiv)
+staffCardsBodyDiv.appendChild(houseRateh5)
+staffCardsBodyDiv.appendChild(houseStatush5)
+staffCardsBodyDiv.appendChild(vacationDateh5)
+staffCardsBodyDiv.appendChild(houseDescriptionp)
+staffCardsDiv.appendChild(staffCardsBodyDiv)
+staffInfoDiv.appendChild(staffCardsDiv)
+mainContent.appendChild(staffInfoDiv);
+}
+
+const modifyHouseInfoDiv = document.createElement('div');
+modifyHouseInfoDiv.classList.add('container-fluid', 'd-flex', 'justify-content-around');
+
+const updateHouseInfoDiv = document.createElement('div');
+updateHouseInfoDiv.classList.add('d-flex', 'flex-column');
+const addHouseDiv = document.createElement('div');
+const deleteHouseDiv = document.createElement('div');
+
+const updateHouseInfoh5 = document.createElement('h5');
+updateHouseInfoh5.style.fontWeight = 'bold';
+updateHouseInfoh5.innerHTML = 'Update house info:'
+updateHouseInfoDiv.appendChild(updateHouseInfoh5)
+
+const updateHouseForm = document.createElement('form');
+const houseIdLabel = document.createElement('label')
+houseIdLabel.innerHTML = 'House Id';
+const houseIdInput = document.createElement('input')
+houseIdInput.classList.add('form-control')
+houseIdInput.type = 'text';
+houseIdInput.setAttribute('id', 'houseIdInput')
+const rateLabel = document.createElement('label')
+rateLabel.innerHTML = 'House Rate';
+const rateInput = document.createElement('input')
+rateInput.classList.add('form-control')
+rateInput.type = 'text';
+rateInput.setAttribute('id', 'updateRate')
+const statusLabel = document.createElement('label')
+statusLabel.innerHTML = 'House Status';
+const statusInput = document.createElement('input')
+statusInput.classList.add('form-control')
+statusInput.type = 'text';
+statusInput.setAttribute('id', 'updateStatus')
+const vacationDateLabel = document.createElement('label')
+vacationDateLabel.innerHTML = 'Expected Vacation Date';
+const vacationDateInput = document.createElement('input')
+vacationDateInput.classList.add('form-control')
+vacationDateInput.type = 'text';
+vacationDateInput.setAttribute('id', 'updateVacation')
+const houseDescriptionLabel = document.createElement('label')
+houseDescriptionLabel.innerHTML = 'House Description';
+const houseDescriptionInput = document.createElement('input')
+houseDescriptionInput.classList.add('form-control')
+houseDescriptionInput.type = 'text-area';
+houseDescriptionInput.setAttribute('id', 'updateDescription')
+
+const updateHouseBtn = document.createElement('button')
+updateHouseBtn.classList.add('btn', 'btn-success', 'addCarBtn')
+updateHouseBtn.innerHTML = 'Update'
+
+
+updateHouseForm.appendChild(houseIdLabel)
+updateHouseForm.appendChild(houseIdInput)
+updateHouseForm.appendChild(rateLabel);
+updateHouseForm.appendChild(rateInput);
+updateHouseForm.appendChild(statusLabel);
+updateHouseForm.appendChild(statusInput);
+updateHouseForm.appendChild(vacationDateLabel);
+updateHouseForm.appendChild(vacationDateInput);
+updateHouseForm.appendChild(houseDescriptionLabel);
+updateHouseForm.appendChild(houseDescriptionInput);
+
+updateHouseForm.appendChild(updateHouseBtn)
+
+updateHouseInfoDiv.appendChild(updateHouseForm)
+
+
+//add house
+const addHouseInfoh5 = document.createElement('h5');
+addHouseInfoh5.style.fontWeight = 'bold';
+addHouseInfoh5.innerHTML = 'Add a house:'
+addHouseDiv.appendChild(addHouseInfoh5)
+
+const addHouseForm = document.createElement('form');
+const addrateLabel = document.createElement('label')
+addrateLabel.innerHTML = 'House Rate';
+const addrateInput = document.createElement('input')
+addrateInput.classList.add('form-control')
+addrateInput.type = 'text';
+addrateInput.setAttribute('id', 'addRate')
+const addstatusLabel = document.createElement('label')
+addstatusLabel.innerHTML = 'House Status';
+const addstatusInput = document.createElement('input')
+addstatusInput.classList.add('form-control')
+addstatusInput.type = 'text';
+addstatusInput.setAttribute('id', 'addStatus')
+const addvacationDateLabel = document.createElement('label')
+addvacationDateLabel.innerHTML = 'Expected Vacation Date';
+const addvacationDateInput = document.createElement('input')
+addvacationDateInput.classList.add('form-control')
+addvacationDateInput.type = 'text';
+addvacationDateInput.setAttribute('id', 'addVacation')
+const addhouseDescriptionLabel = document.createElement('label')
+addhouseDescriptionLabel.innerHTML = 'House Description';
+const addhouseDescriptionInput = document.createElement('input')
+addhouseDescriptionInput.classList.add('form-control')
+addhouseDescriptionInput.type = 'text-area';
+addhouseDescriptionInput.setAttribute('id', 'addDescription')
+
+const addHouseBtn = document.createElement('button')
+addHouseBtn.classList.add('btn', 'btn-success', 'addCarBtn')
+addHouseBtn.innerHTML = 'Add'
+
+addHouseForm.appendChild(addrateLabel);
+addHouseForm.appendChild(addrateInput);
+addHouseForm.appendChild(addstatusLabel);
+addHouseForm.appendChild(addstatusInput);
+addHouseForm.appendChild(addvacationDateLabel);
+addHouseForm.appendChild(addvacationDateInput);
+addHouseForm.appendChild(addhouseDescriptionLabel);
+addHouseForm.appendChild(addhouseDescriptionInput);
+
+addHouseForm.appendChild(addHouseBtn)
+
+addHouseDiv.appendChild(addHouseForm)
+
+//delete house
+const deleteHouseInfoh5 = document.createElement('h5');
+deleteHouseInfoh5.style.fontWeight = 'bold';
+deleteHouseInfoh5.innerHTML = 'Delete a house:'
+deleteHouseDiv.appendChild(deleteHouseInfoh5)
+
+const deleteHouseForm = document.createElement('form');
+const deletehouseIdLabel = document.createElement('label')
+deletehouseIdLabel.innerHTML = 'House Id';
+const deletehouseIdInput = document.createElement('input')
+deletehouseIdInput.classList.add('form-control')
+deletehouseIdInput.type = 'text';
+deletehouseIdInput.setAttribute('id', 'deletehouseIdInput')
+
+const deleteHouseBtn = document.createElement('button')
+deleteHouseBtn.classList.add('btn', 'btn-success', 'addCarBtn')
+deleteHouseBtn.innerHTML = 'Delete'
+
+deleteHouseForm.appendChild(deletehouseIdLabel)
+deleteHouseForm.appendChild(deletehouseIdInput)
+deleteHouseForm.appendChild(deleteHouseBtn)
+
+deleteHouseDiv.appendChild(deleteHouseForm)
+
+modifyHouseInfoDiv.appendChild(updateHouseInfoDiv)
+modifyHouseInfoDiv.appendChild(addHouseDiv)
+modifyHouseInfoDiv.appendChild(deleteHouseDiv)
+
+
+mainContent.appendChild(modifyHouseInfoDiv);
+
+updateHouseForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  let updateHouseInfo = {
+    houseId : document.getElementById('houseIdInput').value,
+    rate : document.getElementById('updateRate').value,
+    status : document.getElementById('updateStatus').value,
+    expectedVacationDate : document.getElementById('updateVacation').value,
+    description : document.getElementById('updateDescription').value
+  };
+  updateHouse(updateHouseInfo);
+})
+addHouseForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  let addHouseInfo = {
+    rate : document.getElementById('addRate').value,
+    status : document.getElementById('addStatus').value,
+    expectedVacationDate : document.getElementById('addVacation').value,
+    description : document.getElementById('addDescription').value
+  };
+  addHouse(addHouseInfo);
+})
+deleteHouseForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  let deleteHouseInfo = {
+    deleteHouseId : document.getElementById('deletehouseIdInput').value
+  };
+  deleteHouse(deleteHouseInfo);
+})
+}
+
+async function updateHouse(updateHouseInfo){
+  const options = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json'},
+    body: JSON.stringify(updateHouseInfo)
+  }
+  fetch('/updateHouse', options)
+}
+
+async function addHouse(addHouseInfo){
+  const options = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json'},
+    body: JSON.stringify(addHouseInfo)
+  }
+  fetch('/addHouse', options)
+}
+
+async function deleteHouse(deleteHouseInfo){
+  const options = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json'},
+    body: JSON.stringify(deleteHouseInfo)
+  }
+  fetch('/deleteHouse', options)
 }
